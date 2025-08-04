@@ -1,26 +1,31 @@
 const jwt = require('jsonwebtoken');
-const { JWT_SECRET } = process.env;
+const User = require('../models/User');
+require('dotenv').config();
 
-// Protect middleware to verify JWT
-const protect = (req, res, next) => {
+const protect = async (req, res, next) => {
   let token;
 
   if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
-    token = req.headers.authorization.split(' ')[1];
+    try {
+      token = req.headers.authorization.split(' ')[1];
+
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      req.user = await User.findById(decoded.userId).select('-password');
+
+      if (!req.user) {
+        return res.status(401).json({ message: 'User not found' });
+      }
+
+      next();
+    } catch (error) {
+      console.error(error);
+      res.status(401).json({ message: 'Not authorized, token failed' });
+    }
   }
 
   if (!token) {
-    return res.status(401).json({ message: 'Not authorized, no token' });
-  }
-
-  try {
-    // Verify token
-    const decoded = jwt.verify(token, JWT_SECRET);
-    req.user = decoded.user;  // Attach user info to the request object
-    next();  // Proceed to the next middleware or route handler
-  } catch (err) {
-    res.status(401).json({ message: 'Not authorized, token failed' });
-  }
+    return res.status(401).json({ message: 'Not authorized, no token' });  
+}
 };
 
 module.exports = { protect };

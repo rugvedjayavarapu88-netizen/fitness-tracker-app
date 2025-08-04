@@ -7,7 +7,11 @@ require('dotenv').config();
 
 const app = express();
 console.log("Server is starting...");
+
+// Middleware to parse JSON requests
 app.use(express.json());
+
+// Middleware to handle CORS
 app.use(cors());
 
 // Log to confirm connection to MongoDB
@@ -33,10 +37,15 @@ app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server running on port ${PORT}`);
 });
 
+// Import and use auth routes
+// This will handle user authentication routes
 app.use('/api/auth', authRoutes);
 
 const workoutRoutes = require('./routes/workouts');
+// Import and use workout routes
+// This will handle workout-related routes
+// Ensure that the workout routes are defined after the auth route
 app.use('/api/workouts', workoutRoutes);
 
 // Error Handling Middleware (catch all errors)
-app.use(errorHandler);
+app.use(errorHandler);// Add this as the last middleware to catch all errors
