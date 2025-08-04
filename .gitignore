@@ -1,0 +1,16 @@
+# Ignore node_modules folders
+fitness-tracker-backend/node_modules/
+fitness-tracker-frontend/node_modules/
+
+# Ignore build folders
+fitness-tracker-frontend/build/
+
+# Ignore .env files
+fitness-tracker-backend/.env
+fitness-tracker-frontend/.env
+
+# Other general files
+.env
+*.log
+*.env
+.DS_Store
