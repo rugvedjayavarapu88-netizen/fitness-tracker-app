@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const authRoutes = require('./routes/auth');
+const { errorHandler } = require('./middleware/errorMiddleware');  // For centralized error handling
 require('dotenv').config();
 
 const app = express();
@@ -36,3 +37,6 @@ app.use('/api/auth', authRoutes);
 
 const workoutRoutes = require('./routes/workouts');
 app.use('/api/workouts', workoutRoutes);
+
+// Error Handling Middleware (catch all errors)
+app.use(errorHandler);
