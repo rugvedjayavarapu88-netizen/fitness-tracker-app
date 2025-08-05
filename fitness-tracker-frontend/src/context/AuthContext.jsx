@@ -20,7 +20,7 @@ export const AuthProvider = ({ children }) => {
   // Login
   const login = async (email, password) => {
     try {
-      const res = await API.post('/auth/login', { email, password });
+      const res = await API.post('api/auth/login', { email, password });
       localStorage.setItem('token', res.data.token);
       setToken(res.data.token);
       navigate('/dashboard');
@@ -32,7 +32,7 @@ export const AuthProvider = ({ children }) => {
   // Signup
   const signup = async (email, password) => {
     try {
-      await API.post('/auth/signup', { email, password });
+      await API.post('api/auth/signup', { email, password });
       alert('Signup successful! Please log in.');
       navigate('/login');
     } catch (err) {
@@ -51,7 +51,7 @@ export const AuthProvider = ({ children }) => {
   // Forgot Password
   const forgotPassword = async (email) => {
     try {
-      const res = await API.post('/auth/forgot-password', { email });
+      const res = await API.post('api/auth/forgot-password', { email });
       alert(res.data.message || 'Check your email for reset instructions');
     } catch (err) {
       alert(err.response?.data?.message || 'Error sending reset email');
@@ -61,7 +61,7 @@ export const AuthProvider = ({ children }) => {
   // Reset Password
   const resetPassword = async (resetToken, newPassword) => {
     try {
-      const res = await API.post(`/auth/reset-password/${resetToken}`, {
+      const res = await API.post(`api/auth/reset-password/${resetToken}`, {
         password: newPassword,
       });
       alert(res.data.message || 'Password reset successful');
