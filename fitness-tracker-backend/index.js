@@ -48,4 +48,4 @@ const workoutRoutes = require('./routes/workouts');
 app.use('/api/workouts', workoutRoutes);
 
 // Error Handling Middleware (catch all errors)
-app.use(errorHandler);// Add this as the last middleware to catch all errors
+app.use(errorHandler);// Add this as the last middleware to catch all errors// trigger CI
