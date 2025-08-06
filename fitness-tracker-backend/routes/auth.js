@@ -3,6 +3,8 @@ const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const User = require('../models/User');
 const router = express.Router();
+const sendEmail = require('../utils/sendEmail');
+
 require('dotenv').config();
 
 // Sign Up Route
@@ -73,8 +75,14 @@ router.post('/forgot-password', async (req, res) => {
     await user.save();
 
     // Simulate sending email with reset link (returning in response for now)
-    const resetUrl = `http://localhost:5001/api/auth/reset-password/${resetToken}`;
-    res.status(200).json({ message: 'Reset link generated', resetUrl });
+    const resetURL = `http://localhost:5173/reset-password/${resetToken}`;
+    const message = `
+  <h2>Password Reset</h2>
+  <p>Click the link below to reset your password:</p>
+  <a href="${resetURL}">Reset Password</a>
+`;
+
+await sendEmail(email, 'Reset your password', message);
 
   } catch (err) {
     res.status(500).json({ message: 'Server error' });
